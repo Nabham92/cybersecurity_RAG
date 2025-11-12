@@ -4,11 +4,9 @@ import numpy as np
 
 def clean_metadata(meta):
     """
-    Nettoie les métadonnées pour ChromaDB :
-    - Supprime les None
-    - Convertit np.ndarray → str(list)
-    - Flatten les dict imbriqués → "parent_subkey"
-    - Tout en str/int/float/bool
+    Cleans metadata to be compatible  :
+    - Gets rid of None
+    - Converts nested dicts/lists in str
     """
 
     if meta is None:
@@ -28,17 +26,17 @@ def clean_metadata(meta):
             continue
 
         if isinstance(v, (list, tuple, np.ndarray)):
-            # Liste ou array → string
+            
             if isinstance(v, np.ndarray):
                 v = v.tolist()
-            # Évite les listes trop longues
+            
             if len(v) > 10:
                 cleaned[key] = str(v[:10]) + "..."  
             else:
                 cleaned[key] = str(v)
 
         elif isinstance(v, dict):
-            # Flatten dict imbriqué
+            
             for sub_k, sub_v in v.items():
                 sub_key = f"{key}_{sub_k}"
                 if sub_v is None:
@@ -47,7 +45,7 @@ def clean_metadata(meta):
                     cleaned[sub_key] = str(sub_v)  # tout en str pour sécurité
 
         else:
-            # str, int, float, bool → OK
+            #
             cleaned[key] = v
 
     return cleaned
