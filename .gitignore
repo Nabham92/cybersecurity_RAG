@@ -1,0 +1,13 @@
+*.ipynb
+
+chroma/
+
+data/
+
+.vscode/
+
+__pycache__
+
+venv/
+
+backend/__pycache__
