@@ -5,7 +5,7 @@ from backend.format_prompt import filter_metadata
 from config import COLLECTION_NAME,METADATAS_TO_INCLUDE
 
 def get_ollama_client():
-    os.environ["OLLAMA_API_KEY"] = r"95ebea5be5164fa2ba9b0a7c1f36b227.ei7XxrMXMYf_DWqiaTzh4ba6"
+    os.environ["OLLAMA_API_KEY"] = ""
 
     client = Client(
         host="https://ollama.com",
@@ -64,7 +64,7 @@ def get_prediction_prompt(description,n_results=3):
                 - Then briefly justify each metric (AV, AC, PR, UI, S, C, I, A).
                 - Output a score or severity.
                 - Suggest fixes and what to investigate.
-                
+
                 Output format (STRICT):
                 Vector: CVSS:3.1/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X
                 Justification:
