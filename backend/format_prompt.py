@@ -22,18 +22,8 @@ def filter_metadata(retrieval,METADATAS_TO_INCLUDE,n_results):
 
     return(meta)
 
-def get_message(prompt):
 
-    messages = [
-    {
-        'role': 'user',
-        'content': prompt,
-    },
-    ]
-    
-    return(messages)
-
-def get_rag_prompt(query,n_results=5):
+def get_rag_prompt(query,n_results=1):
     retrieval=retrieve(query,n_results)
     retrieval["metadatas"]=filter_metadata(retrieval,METADATAS_TO_INCLUDE,n_results)
 
@@ -42,4 +32,51 @@ def get_rag_prompt(query,n_results=5):
     Metadata : {retrieval["metadatas"]}"""
 
     return(rag_prompt)
+
+def get_message(prompt):
+
+    messages = [{   'role': 'user',
+            'content': prompt},]
+    
+    return(messages)
+
+
+def get_prediction_prompt(description):
+    retrieval=retrieve(description,n_results=3)
+
+    
+
+    rag_prompt=f""" You are a cybersecurity analyst specialized in CVSS:3.1 scoring.
+
+                Your task is to predict the most likely CVSS:3.1 vector based on:
+                1) the vulnerability description
+                2) the RAG-retrieved similar vulnerabilities
+
+                Steps:
+                - First output the predicted vector (strict format).
+                - Then briefly justify each metric (AV, AC, PR, UI, S, C, I, A).
+                - Do not output a score or severity.
+
+                Output format (STRICT):
+                Vector: CVSS:3.1/AV:X/AC:X/PR:X/UI:X/S:X/C:X/I:X/A:X
+                Justification:
+                - AV: ...
+                - AC: ...
+                - PR: ...
+                - UI: ...
+                - S: ...
+                - C: ...
+                - I: ...
+                - A: ...
+
+                Input description:
+                {description}
+
+                Retrieved context:
+                {retrieval["documents"]}
+        """
+    
+    messages=get_message(rag_prompt)
+    
+    return(messages)
 
