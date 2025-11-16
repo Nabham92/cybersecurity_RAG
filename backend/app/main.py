@@ -1,16 +1,22 @@
 from fastapi import FastAPI
-from backend.rag_inference import get_prediction_prompt,rag_inference
+from backend.app.rag.rag_inference import get_rag_prompt,get_rag_answer
+from pydantic import BaseModel
+
+class ChatRequest(BaseModel):
+    prompt : str
 
 app=FastAPI()
 
+BASE_URL=r"http://localhost:8000"
+
 @app.post("/chat")
 
-def inference(query):
-    rag_prompt=get_prediction_prompt(query)
-    answer=str(rag_inference(rag_prompt))
-
+def inference(data : ChatRequest):
+    print(data.prompt)    
+    answer=str(get_rag_answer(data.prompt))
+    print(answer)    
     output={"model" : "gpt-oss:20b",
-            "messages" : [ {"role" : "user" , "content" : query},
+            "messages" : [ {"role" : "user" , "content" : data.prompt},
                           {"role" : "system" , "content" : answer}
                           ]
             }   

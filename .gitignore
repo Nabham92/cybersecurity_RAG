@@ -12,6 +12,8 @@ backend/app/database/__pycache__
 
 backend/app/database/da973885-3f05-4d6c-bbad-39eeac11e094
 
+backend/app/database/chroma.sqlite3
+
 __pycache__
 
 venv/

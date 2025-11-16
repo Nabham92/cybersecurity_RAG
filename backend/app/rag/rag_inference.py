@@ -32,7 +32,7 @@ def get_message(prompt):
     
     return(messages)
 
-def get_rag_prompt(prompt,collection_name,n_results=3):
+def get_rag_prompt(prompt,collection_name=COLLECTION_NAME,n_results=3):
 
     retrieval=retrieve(prompt,collection_name,n_results=n_results)
 

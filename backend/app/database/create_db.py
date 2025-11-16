@@ -21,14 +21,14 @@ def create_chroma_collection(client,collection_name,embedding_function=None):
 def add_to_collection(collection,df : pd.DataFrame):
 
     ids=[str(i) for i in range(0,len(df))]
-    metadatas = [meta if meta is not None else {}for meta in df["meta"].to_list()]
+    metadatas = [meta if meta is not None else {} for meta in df["meta"].to_list()]
 
     collection.add(
         ids=ids,
         documents=df["text"].to_list(),
         metadatas=metadatas
     )
-    print(f"{len(ids)} documents added.")
+    print(f"{len(ids)} documents added.",f"Collection length : {collection.count()} documents")
     print(collection.peek)
 
 def main():
@@ -38,7 +38,7 @@ def main():
     df=load_data()
     client=get_chroma_client()
     collection=create_chroma_collection(client,COLLECTION_NAME,embedding_function=intfloat_embedding)
-    print(collection)
+    
     add_to_collection(collection,df)
 
 if __name__== "__main__":
