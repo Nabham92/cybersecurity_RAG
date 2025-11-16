@@ -9,6 +9,7 @@ def clean_metadata(meta):
     - Converts nested dicts/lists in str
     """
 
+
     if meta is None:
         return {}
     
@@ -49,7 +50,7 @@ def clean_metadata(meta):
             cleaned[key] = v
 
     return cleaned
-    
+
 def load_data(N=1000):
     df=pd.read_parquet(FILE_PATH_DATA)
     df["meta"]=df["meta"].apply(clean_metadata)

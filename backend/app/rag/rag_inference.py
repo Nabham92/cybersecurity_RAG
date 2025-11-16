@@ -1,29 +1,28 @@
 import os
 from ollama import Client
-from backend.create_db import get_client
-from backend.format_prompt import filter_metadata
+from backend.app.database.vector_store import get_chroma_client,get_collection
 from config import COLLECTION_NAME,METADATAS_TO_INCLUDE
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def get_ollama_client():
-    os.environ["OLLAMA_API_KEY"] = ""
+    os.environ["OLLAMA_API_KEY"] = os.getenv("API_KEY")
 
     client = Client(
         host="https://ollama.com",
         headers={'Authorization': 'Bearer ' + os.environ.get('OLLAMA_API_KEY')}
     )
-
     return(client)
 
-def get_collection():
-    client=get_client()
-    collection=client.get_collection(COLLECTION_NAME)
-    return(collection)
+def retrieve(query,collection_name,n_results=3):
 
-def retrieve(query,n_results):
+    client=get_chroma_client()
 
-    collection=get_collection()
+    collection=get_collection(client,collection_name)
+
     retrieval=collection.query(query_texts=[query],n_results=n_results)
-
+    
     return(retrieval)
 
 def get_message(prompt):
@@ -33,25 +32,9 @@ def get_message(prompt):
     
     return(messages)
 
-def get_rag_prompt(query,n_results=1):
-    retrieval=retrieve(query,n_results)
-    retrieval["metadatas"]=filter_metadata(retrieval,METADATAS_TO_INCLUDE,n_results)
+def get_rag_prompt(prompt,collection_name,n_results=3):
 
-    rag_prompt=f"""{query} Answer leveraging the following context 
-        Documents : {retrieval["documents"]},
-    Metadata : {retrieval["metadatas"]}"""
-
-    return(rag_prompt)
-
-def get_message(prompt):
-
-    messages = [{   'role': 'user',
-            'content': prompt},]
-    
-    return(messages)
-
-def get_prediction_prompt(description,n_results=3):
-    retrieval=retrieve(description,n_results=n_results)
+    retrieval=retrieve(prompt,collection_name,n_results=n_results)
 
     rag_prompt=f""" You are a cybersecurity analyst specialized in CVSS:3.1 scoring.
 
@@ -78,7 +61,7 @@ def get_prediction_prompt(description,n_results=3):
                 - A: ...
 
                 Input description:
-                {description}
+                {prompt}
 
                 Retrieved context:
                 Document : {retrieval["documents"]},
@@ -88,32 +71,26 @@ def get_prediction_prompt(description,n_results=3):
     
     return(rag_prompt)
 
-def rag_inference(prompt):
-    client = get_ollama_client()
-    messages = get_message(prompt)
+def get_rag_answer(prompt):
 
-    print(messages)
+    ollama_client = get_ollama_client()
+
+    prompt=get_rag_prompt(prompt,COLLECTION_NAME)
+
+    messages = get_message(prompt)
 
     full_text = ""
 
-    for part in client.chat('gpt-oss:20b', messages=messages, stream=True):
+    for part in ollama_client.chat('gpt-oss:20b', messages=messages, stream=True):
         message = part.get("message", {})
         chunk = message.get("content")
 
-        
         if chunk:
             full_text += chunk
             print(chunk, end="", flush=True)
 
     return full_text
 
-from backend.format_prompt import get_rag_prompt
-
-def get_rag_answer(query,n_results=5): 
-    rag_prompt=get_rag_prompt(query,n_results=n_results)
-    return(rag_inference(rag_prompt))
-
 if __name__=="__main__":
-    query=input("Ask : ")
-    #get_rag_answer(query)
+    get_rag_answer()
 

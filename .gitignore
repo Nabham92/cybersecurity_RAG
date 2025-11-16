@@ -1,13 +1,21 @@
 *.ipynb
 
-chroma/
+backend/chroma/
 
 data/
 
 .vscode/
+
+backend/app/database/chroma
+
+backend/app/database/__pycache__
+
+backend/app/database/da973885-3f05-4d6c-bbad-39eeac11e094
 
 __pycache__
 
 venv/
 
 backend/__pycache__
+
+.env
