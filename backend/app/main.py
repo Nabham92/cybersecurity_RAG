@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from backend.app.rag.rag_inference import get_rag_prompt,get_rag_answer
+from app.rag.rag_inference import get_rag_prompt,get_rag_answer
 from pydantic import BaseModel
 
 class ChatRequest(BaseModel):

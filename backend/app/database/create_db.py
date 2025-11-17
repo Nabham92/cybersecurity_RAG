@@ -1,8 +1,8 @@
 import chromadb
 from chromadb.config import Settings
 import pandas as pd 
-from backend.app.database.embeddings import intfloat_embedding
-from backend.app.database.vector_store import get_chroma_client
+from app.database.embeddings import intfloat_embedding
+from app.database.vector_store import get_chroma_client
 
 def create_chroma_collection(client,collection_name,embedding_function=None):
 
@@ -32,7 +32,7 @@ def add_to_collection(collection,df : pd.DataFrame):
     print(collection.peek)
 
 def main():
-    from backend.app.database.processing import load_data
+    from app.database.processing import load_data
     from config import COLLECTION_NAME
 
     df=load_data()

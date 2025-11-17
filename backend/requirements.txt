@@ -1,2 +1,6 @@
-OLLAMA
-python-dotenv 
+chromadb
+pandas
+ollama
+fastapi
+requests
+uvicorn

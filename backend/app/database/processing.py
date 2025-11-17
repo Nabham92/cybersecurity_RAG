@@ -9,7 +9,6 @@ def clean_metadata(meta):
     - Converts nested dicts/lists in str
     """
 
-
     if meta is None:
         return {}
     

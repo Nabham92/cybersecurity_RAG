@@ -1,7 +1,7 @@
 import os
 from ollama import Client
-from backend.app.database.vector_store import get_chroma_client,get_collection
-from config import COLLECTION_NAME,METADATAS_TO_INCLUDE
+from app.database.vector_store import get_chroma_client,get_collection
+from config import COLLECTION_NAME
 from dotenv import load_dotenv
 
 load_dotenv()
