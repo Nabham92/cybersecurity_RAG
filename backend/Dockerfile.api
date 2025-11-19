@@ -6,12 +6,11 @@ WORKDIR /app
 
 ENV PYTHONPATH=/app
 
-COPY requirements.txt . 
-
+COPY . .
 RUN uv pip install --system -r requirements.txt
 
 COPY . . 
 
 EXPOSE 8001 
 
-CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8001"]

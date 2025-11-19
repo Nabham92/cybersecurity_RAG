@@ -1,24 +1,27 @@
 import gradio as gr 
-from backend.app.rag.rag_inference import get_rag_answer
 import requests
+from dotenv import load_dotenv
 
+load_dotenv()
 
-BASE_URL=r"http://127.0.0.1:8001"
+BASE_URL = "http://localhost:8001"
 
-def chat_fn(prompt):
+def chat_fn(prompt,history):
 
     message={"prompt" : prompt}
-
+    print(message)
     request_url=BASE_URL+"/chat"
+
     print(request_url)
 
     response=requests.post(request_url,json=message)
 
     print(response.status_code)
+    res = response.json()
 
-    return response
+    last_message = res["messages"][-1]["content"]
 
-#gr.ChatInterface(chat_fn).launch(debug=True)
+    return last_message
 
 if __name__=="__main__" : 
-    chat_fn("hi")
+    gr.ChatInterface(chat_fn).launch(debug=True)

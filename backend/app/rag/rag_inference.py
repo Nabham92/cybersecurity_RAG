@@ -35,6 +35,7 @@ def get_message(prompt):
 def get_rag_prompt(prompt,collection_name=COLLECTION_NAME,n_results=3):
 
     retrieval=retrieve(prompt,collection_name,n_results=n_results)
+    print(retrieval)
 
     rag_prompt=f""" You are a cybersecurity analyst specialized in CVSS:3.1 scoring.
 
@@ -72,19 +73,19 @@ def get_rag_prompt(prompt,collection_name=COLLECTION_NAME,n_results=3):
     return(rag_prompt)
 
 def get_rag_answer(prompt):
-
+    print("generation")
     ollama_client = get_ollama_client()
 
     prompt=get_rag_prompt(prompt,COLLECTION_NAME)
-
+    print(prompt)
     messages = get_message(prompt)
-
+    print(messages)
     full_text = ""
 
     for part in ollama_client.chat('gpt-oss:20b', messages=messages, stream=True):
         message = part.get("message", {})
         chunk = message.get("content")
-
+        print(chunk)
         if chunk:
             full_text += chunk
             print(chunk, end="", flush=True)
@@ -92,5 +93,5 @@ def get_rag_answer(prompt):
     return full_text
 
 if __name__=="__main__":
-    get_rag_answer()
+    get_rag_answer("hi")
 

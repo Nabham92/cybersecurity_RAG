@@ -7,14 +7,10 @@ class ChatRequest(BaseModel):
 
 app=FastAPI()
 
-BASE_URL=r"http://localhost:8000"
-
 @app.post("/chat")
 
-def inference(data : ChatRequest):
-    print(data.prompt)    
-    answer=str(get_rag_answer(data.prompt))
-    print(answer)    
+def inference(data : ChatRequest):    
+    answer=get_rag_answer(data.prompt)    
     output={"model" : "gpt-oss:20b",
             "messages" : [ {"role" : "user" , "content" : data.prompt},
                           {"role" : "system" , "content" : answer}

@@ -1,3 +1,4 @@
+
 import chromadb
 from chromadb.config import Settings
 import pandas as pd 
@@ -37,7 +38,7 @@ def main():
 
     df=load_data()
     client=get_chroma_client()
-    collection=create_chroma_collection(client,COLLECTION_NAME,embedding_function=intfloat_embedding)
+    collection=create_chroma_collection(client,COLLECTION_NAME,embedding_function=intfloat_embedding())
     
     add_to_collection(collection,df)
 

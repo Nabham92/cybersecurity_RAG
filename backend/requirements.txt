@@ -4,3 +4,4 @@ ollama
 fastapi
 requests
 uvicorn
+sentence_transformers 
