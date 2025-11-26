@@ -2,8 +2,8 @@
 import chromadb
 from chromadb.config import Settings
 import pandas as pd 
-from app.database.embeddings import intfloat_embedding
-from app.database.vector_store import get_chroma_client
+from backend.app.database.embeddings import intfloat_embedding
+from backend.app.database.vector_store import get_chroma_client
 
 def create_chroma_collection(client,collection_name,embedding_function=None):
 
@@ -19,7 +19,7 @@ def create_chroma_collection(client,collection_name,embedding_function=None):
 
     return(collection)
 
-def add_to_collection(collection,df : pd.DataFrame):
+def add_to_collection(collection, df : pd.DataFrame):
 
     ids=[str(i) for i in range(0,len(df))]
     metadatas = [meta if meta is not None else {} for meta in df["meta"].to_list()]
@@ -30,11 +30,12 @@ def add_to_collection(collection,df : pd.DataFrame):
         metadatas=metadatas
     )
     print(f"{len(ids)} documents added.",f"Collection length : {collection.count()} documents")
+
     print(collection.peek)
 
 def main():
-    from app.database.processing import load_data
-    from config import COLLECTION_NAME
+    from backend.app.database.processing import load_data
+    from backend.config import COLLECTION_NAME
 
     df=load_data()
     client=get_chroma_client()
